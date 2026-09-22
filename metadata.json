@@ -1,0 +1,6 @@
+{
+  "name": "OpenMedia SDK",
+  "description": "Open source Android SDK providing modular, extensible core abstractions for media playback, queues, playlists, and providers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
