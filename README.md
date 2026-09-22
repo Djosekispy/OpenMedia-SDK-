@@ -111,26 +111,63 @@ openmedia-sdk/
 
 ---
 
-## 5. Instalação
+## 5. Instalação & Publicação
 
-Adicione o módulo `openmedia-sdk` às dependências do seu projecto Android:
+### 5.1 Como Dependência Maven (JitPack / Maven Central / Maven Local)
 
+Adicione o repositório no seu arquivo `settings.gradle.kts`:
 ```kotlin
-// settings.gradle.kts
-include(":openmedia-sdk")
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal() // para testes locais da lib
+        maven { url = uri("https://jitpack.io") }
+    }
+}
 ```
 
-No ficheiro `build.gradle.kts` da sua aplicação:
-
+E declare a dependência no `build.gradle.kts` do módulo do seu aplicativo:
 ```kotlin
 dependencies {
-    implementation(project(":openmedia-sdk"))
+    implementation("org.openmedia:openmedia-sdk:0.1.0")
 
     // Coroutines para observação de Flow
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 }
 ```
+
+### 5.2 Módulo Local / Subprojeto
+Caso prefira utilizar o código-fonte diretamente como módulo:
+```kotlin
+// settings.gradle.kts
+include(":openmedia-sdk")
+
+// build.gradle.kts (app)
+dependencies {
+    implementation(project(":openmedia-sdk"))
+}
+```
+
+### 5.3 Publicação da Biblioteca
+
+Para compilar, gerar os artefatos (`.aar`, `-sources.jar`, `.pom`) e publicar:
+
+- **Publicação Local (Maven Local):**
+  ```bash
+  gradle :openmedia-sdk:publishToMavenLocal
+  ```
+  Isso instala a biblioteca em `~/.m2/repository/org/openmedia/openmedia-sdk/0.1.0/`.
+
+- **Publicação Remota (JitPack):**
+  Suba o repositório para o GitHub com uma tag de release (`git tag -a v0.1.0 -m "Release v0.1.0"` e `git push origin v0.1.0`). O JitPack compilará e disponibilizará o artefato automaticamente.
+
+- **Publicação no Maven Central (Sonatype / Central Portal):**
+  Configure as credenciais e chaves GPG no arquivo de ambiente ou `gradle.properties` e execute:
+  ```bash
+  gradle :openmedia-sdk:publish
+  ```
 
 ---
 
